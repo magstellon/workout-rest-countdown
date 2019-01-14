@@ -41,6 +41,6 @@ body, html, #app {
   font-size: 48px;
 
   color: #fff;
-  background-image: radial-gradient(circle, #020032, #0c0a2d, #141228, #1a1823, #1e1e1e);
+  background-image: radial-gradient(circle, #051937, #061534, #080f30, #0a082d, #0c0029);
 }
 </style>

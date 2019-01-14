@@ -20,7 +20,7 @@ export default {
     height: 300px;
 
     border-radius: 300px;
-    border: 10px solid #AAAAAA;
+    border: 10px solid #ACA9BB;
 
     text-align: center;
     line-height: 300px;

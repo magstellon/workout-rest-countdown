@@ -1,10 +1,11 @@
 <template>
     <div id="interval">
         <p>{{time}}</p>
-        <a class="button" @click="$emit('stop')">Stop</a>
+        <icon icon="stop" class="button" @click="$emit('stop')" />
+        <br/>
 
-        <a class="button" v-if="timeoutId" @click="pause">Pause</a>
-        <a class="button" v-else @click="play">Play</a>
+        <icon icon="pause" class="button" v-if="timeoutId" @click="pause" />
+        <icon icon="play" class="button" v-else @click="play" />
     </div>
 </template>
 
@@ -60,7 +61,7 @@ export default {
     },
     beforeDestroyed() {
         // Remove timeout loop on component's destroy
-        pause();
+        this.pause();
     }
 
 }
