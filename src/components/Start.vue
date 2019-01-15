@@ -15,15 +15,17 @@ export default {
 
 
 <style scoped>
-#start .button {
-    width: 300px;
-    height: 300px;
 
-    border-radius: 300px;
-    border: 10px solid #ACA9BB;
+
+#start .button {
+    width: 280px;
+    height: 280px;
+
+    border-radius: 280px;
+    border: 10px solid #F2ECFF;
 
     text-align: center;
-    line-height: 300px;
+    line-height: 280px;
 
     position: absolute;
     top: 50%;
