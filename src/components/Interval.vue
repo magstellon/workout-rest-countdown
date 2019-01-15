@@ -1,78 +1,100 @@
 <template>
     <div id="interval">
         <svg width="300" height="300">
-            <text x="46" y="165" fill="white">{{time}}</text>
+            <text x="46" y="165" fill="white">{{time()}}</text>
             <circle class="countdown-base" cx="150" cy="150" r="140"/>
-            <circle class="countdown" cx="150" cy="150" r="140" :stroke-dasharray="`2 ${timeLeftPercent + 2}`"/>
+            <circle class="countdown" cx="150" cy="150" r="140" transform="rotate(270, 150, 150)" :stroke-dasharray="`2 ${timeLeftPercent + 2}`"/>
         </svg>
 
         <icon icon="stop" class="button right" @click="$emit('stop')" />
-        <icon icon="pause" class="button left" v-if="timeoutId" @click="pause" />
-        <icon icon="play" class="button left" v-else @click="play" />
-
+        <icon icon="pause" class="button left" v-if="runnable" @click="pause" />
+        <icon icon="play" class="button left" v-if="!runnable && !finish" @click="play" />
+        <icon icon="undo" class="button right" @click="refresh" />
     </div>
 </template>
-
-
 
 <script>
 export default {
     name: 'Interval',
     data() {
         return {
-            duration: 10,
+            duration: 1000,
+            now: new Date(),
             start: null,
             end: null,
-            time: `00:${this.duration}:000`,
-            timeLeftPercent: 100,
-            timeoutId: null
+            runnable: true,
+            timeLeft: 1000
         }
     },
     methods: {
+        run() {
+            if(this.timeLeft > 0 && this.runnable) {
+                setTimeout(() => {
+                    this.now = new Date();
+                    this.timeLeft = new Date(this.end - this.now);
+
+                    if (this.timeLeft <= 0) this.runnable = false;
+
+                    this.run();
+                }, 10);
+            }
+        },
+        play() {
+            this.runnable = true;
+            this.computeInterval();
+            this.run();
+        },
+        pause() {
+            this.runnable = false;
+        },
         computeInterval() {
-            let now = new Date(),
-                timeLeft = new Date(this.end - now),
+            this.start = new Date();
+            this.end = new Date(this.start.getTime());
+            this.end.setMilliseconds(this.end.getMilliseconds() + this.timeLeft);
+        },
+        refresh() {
+            this.timeLeft = this.duration;
+        },
+        time() {
+            let timeLeft = new Date(this.timeLeft),
                 msec = timeLeft.getMilliseconds(),
                 sec = timeLeft.getSeconds(),
-                min = timeLeft.getMinutes();
-            
-            this.timeLeftPercent = parseInt(timeLeft * 100 / new Date(this.end - this.start));
+                min = timeLeft.getMinutes(),
+                time = '00:00:000';
 
-            if(timeLeft <= 0) {
-                this.time = '00:00:000';
-            } else {
+            if(timeLeft > 0) {
                 // Format number to always have N digits
                 msec = ('000' + msec).substr(-3);
                 sec = ('0' + sec).substr(-2);
                 min = ('0' + min).substr(-2);
 
-                this.time = `${min}:${sec}:${msec}`;
-                this.timeoutId = setTimeout(this.computeInterval, 10);
+                return `${min}:${sec}:${msec}`;
             }
-        },
-        pause() {
-            clearTimeout(this.timeoutId);
-            this.timeoutId = null;
-        },
-        play() {
-            this.computeInterval();
+
+            return time;
         }
+    },
+    computed: {
+        finish() {
+            return this.timeLeft <= 0;
+        },
+        timeLeftPercent() {
+            return parseInt(this.timeLeft * 100 / new Date(this.end - this.start));
+        }
+    },
+    created() {
+        this.computeInterval();
     },
     mounted() {
         this.$nextTick(function () {
             // Code that will run only after the entire view has been rendered
-            this.start = new Date();
-            this.end = new Date(this.start.getTime());
-            this.end.setSeconds(this.end.getSeconds() + this.duration);
-            
-            this.play();
+            this.run();
         })
     },
     beforeDestroyed() {
         // Remove timeout loop on component's destroy
         this.pause();
     }
-
 }
 </script>
 
