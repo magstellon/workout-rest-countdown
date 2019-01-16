@@ -1,15 +1,26 @@
 <template>
     <div id="interval">
         <svg width="300" height="300">
-            <text x="46" y="165" fill="white">{{time()}}</text>
+            <template v-if="editable">
+                <polyline class="selector" points="62 110 72 100 82 110" @click="update(60000)"/>
+                <polyline class="selector" points="127 110 137 100 147 110" @click="update(1000)"/>
+            </template>
+
+            <text class="time" x="46" y="165" fill="white">{{time()}}</text>
+
+            <template v-if="editable">
+                <polyline class="selector" points="62 185 72 195 82 185" @click="update(-60000)"/>
+                <polyline class="selector" points="127 185 137 195 147 185" @click="update(-1000)"/>
+            </template>
+
             <circle class="countdown-base" cx="150" cy="150" r="140"/>
             <circle class="countdown" cx="150" cy="150" r="140" transform="rotate(270, 150, 150)" :stroke-dasharray="`2 ${Math.max(timeLeft * 100 / duration, 2)}`"/>
         </svg>
 
-        <icon icon="stop" class="button right" @click="$emit('stop')" />
-        <icon icon="pause" class="button left" v-if="isRunning" @click="pause" />
         <icon icon="play" class="button left" v-if="!isRunning && !finish" @click="play" />
-        <icon icon="undo" class="button right refresh" v-if="!isRunning && duration != timeLeft" @click="refresh" />
+        <icon icon="pause" class="button left" v-if="isRunning && !editable" @click="pause" />
+        
+        <icon icon="undo" class="button right refresh" v-if="duration != timeLeft" @click="refresh" />
     </div>
 </template>
 
@@ -20,15 +31,16 @@ export default {
         return {
             start: null,
             end: null,
-            duration: 10000,
-            timeLeft: 10000,
-            isRunning: true,
+            duration: 30000,
+            timeLeft: 30000,
+            isRunning: false,
+            editable: true
         }
     },
     methods: {
         run() {
             if (this.timeLeft > 0 && this.isRunning) {
-                setTimeout(() => {
+                this.runID = setTimeout(() => {
 
                     this.timeLeft = new Date(this.end - new Date()).getTime();
                     if (this.timeLeft <= 0) this.isRunning = false;
@@ -39,11 +51,13 @@ export default {
         },
         play() {
             this.isRunning = true;
+            this.editable = false;
             this.computeInterval();
             this.run();
         },
         pause() {
             this.isRunning = false;
+            this.runID && clearTimeout(this.runID);
         },
         computeInterval() {
             this.start = new Date();
@@ -51,7 +65,9 @@ export default {
             this.end.setMilliseconds(this.end.getMilliseconds() + this.timeLeft);
         },
         refresh() {
+            this.pause();
             this.timeLeft = this.duration;
+            this.editable = true;
         },
         time() {
             let timeLeft = new Date(this.timeLeft),
@@ -70,21 +86,22 @@ export default {
             }
 
             return time;
+        },
+        update(ms) {
+            if(ms > 0) {
+                // Max time is 59 min 59 sec ~ 354 0000 ms 59000 ms
+                this.duration = Math.min( this.duration + ms, 3540000 + 59000);
+            } else {
+                this.duration = Math.max( this.duration + ms, 1000);
+            }
+
+            this.timeLeft = this.duration;
         }
     },
     computed: {
         finish() {
             return this.timeLeft <= 0;
         }
-    },
-    created() {
-        this.computeInterval();
-    },
-    mounted() {
-        this.$nextTick(function () {
-            // Code that will run only after the entire view has been rendered
-            this.run();
-        })
     },
     beforeDestroyed() {
         // Remove timeout loop on component's destroy
@@ -124,13 +141,24 @@ export default {
     float: right;
 }
 
+.time {
+    /* Prevent from text to be selectable */
+    user-select: none;
+    -webkit-tap-highlight-color: radial-gradient(circle, #051937, #061534, #080f30, #0a082d, #0c0029);
+}
+
 .button:hover {
-    color:#F9F871;
+    color: #F9F871;
     cursor: pointer;
     transition: color 0.5s ease;
 }
 
-.refresh {
-    margin-right: 15px;
+.selector {
+    stroke: #00456A;
+    stroke-width: 5;
+    stroke-linecap: round;
+    fill: none;
+    stroke-linejoin: round;
+    cursor: pointer;
 }
 </style>

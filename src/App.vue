@@ -1,18 +1,15 @@
 <template>
   <div id="app">
-    <Interval v-if="started" @stop="stop"/>
-    <Start v-else :started="started" @start="start"/>
+    <Interval />
   </div>
 </template>
 
 <script>
-import Start from './components/Start.vue'
 import Interval from './components/Interval.vue'
 
 export default {
   name: 'app',
   components: {
-    Start,
     Interval
   },
   data() {
