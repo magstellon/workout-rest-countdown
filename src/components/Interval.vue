@@ -9,7 +9,7 @@
         <icon icon="stop" class="button right" @click="$emit('stop')" />
         <icon icon="pause" class="button left" v-if="isRunning" @click="pause" />
         <icon icon="play" class="button left" v-if="!isRunning && !finish" @click="play" />
-        <icon icon="undo" class="button right" v-if="!isRunning" @click="refresh" />
+        <icon icon="undo" class="button right refresh" v-if="!isRunning && duration != timeLeft" @click="refresh" />
     </div>
 </template>
 
@@ -128,5 +128,9 @@ export default {
     color:#F9F871;
     cursor: pointer;
     transition: color 0.5s ease;
+}
+
+.refresh {
+    margin-right: 15px;
 }
 </style>
