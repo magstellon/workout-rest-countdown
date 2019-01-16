@@ -82,7 +82,7 @@ export default {
                 sec = ('0' + sec).substr(-2);
                 min = ('0' + min).substr(-2);
 
-                return `${min}:${sec}:${msec}`;
+                time = `${min}:${sec}:${msec}`;
             }
 
             return time;
