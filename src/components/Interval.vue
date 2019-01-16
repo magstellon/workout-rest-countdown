@@ -14,7 +14,7 @@
             </template>
 
             <circle class="countdown-base" cx="150" cy="150" r="140"/>
-            <circle class="countdown" cx="150" cy="150" r="140" transform="rotate(270, 150, 150)" :stroke-dasharray="`2 ${Math.max(timeLeft * 100 / duration, 2)}`"/>
+            <circle class="countdown" cx="150" cy="150" r="140" transform="rotate(270, 150, 150)" :stroke-dasharray="`2 ${Math.max((timeLeft * 100 / duration) + 2, 2)}`"/>
         </svg>
 
         <icon icon="play" class="button left" v-if="!isRunning && !finish" @click="play" />
