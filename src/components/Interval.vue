@@ -2,15 +2,15 @@
     <div id="interval">
         <svg width="300" height="300">
             <template v-if="editable">
-                <polyline class="selector" points="62 110 72 100 82 110" @click="update(60000)"/>
-                <polyline class="selector" points="127 110 137 100 147 110" @click="update(1000)"/>
+                <polyline class="selector" points="62 110 72 100 82 110" @click="update(selectors.second.add)"/>
+                <polyline class="selector" points="127 110 137 100 147 110" @click="update(selectors.millisecond.add)"/>
             </template>
 
             <text class="time" x="46" y="165" fill="white">{{time()}}</text>
 
             <template v-if="editable">
-                <polyline class="selector" points="62 185 72 195 82 185" @click="update(-60000)"/>
-                <polyline class="selector" points="127 185 137 195 147 185" @click="update(-1000)"/>
+                <polyline class="selector" points="62 185 72 195 82 185" @click="update(selectors.second.remove)"/>
+                <polyline class="selector" points="127 185 137 195 147 185" @click="update(selectors.millisecond.remove)"/>
             </template>
 
             <circle class="countdown-base" cx="150" cy="150" r="140"/>
@@ -34,7 +34,17 @@ export default {
             duration: 30000,
             timeLeft: 30000,
             isRunning: false,
-            editable: true
+            editable: true,
+            selectors: {
+                second: {
+                    add: 60 * 1000,
+                    remove: -1 * 60 * 1000
+                },
+                millisecond: {
+                    add: 1000,
+                    remove: -1 * 1000
+                }
+            }
         }
     },
     methods: {
@@ -89,10 +99,16 @@ export default {
         },
         update(ms) {
             if(ms > 0) {
-                // Max time is 59 min 59 sec ~ 354 0000 ms 59000 ms
+                // Max time is 59 min 59 sec ~ 354 0000 ms + 59000 ms
                 this.duration = Math.min( this.duration + ms, 3540000 + 59000);
             } else {
-                this.duration = Math.max( this.duration + ms, 1000);
+                // Remove second only when duration is greater than 1 second
+                if (ms == this.selectors.second.remove) {
+                    if (this.duration > 60 * 1000) this.duration = this.duration + ms;
+                } else {
+                    // Min time is 1 sec ~ 1000 ms
+                    this.duration = Math.max( this.duration + ms, 1000);
+                }
             }
 
             this.timeLeft = this.duration;
