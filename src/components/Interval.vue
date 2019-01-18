@@ -126,7 +126,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+@mixin transition($property) {
+    transition: $property 0.5s ease;
+}
+
 #interval {
     position: absolute;
     top: 50%;
@@ -134,47 +139,51 @@ export default {
     transform: translate(-50%, -50%);
 
     width: 300px;
-}
 
-.countdown {
-    fill: none;
-    stroke: #F9F871;
-    stroke-width: 10px;
-}
+    .countdown {
+        fill: none;
+        stroke: #F9F871;
+        stroke-width: 10px;
+    }
 
-.countdown-base {
-    fill: none;
-    stroke: #F2ECFF;
-    stroke-width: 10px;
-    stroke-dasharray: 2;
-}
+    .countdown-base {
+        fill: none;
+        stroke: #F2ECFF;
+        stroke-width: 10px;
+        stroke-dasharray: 2;
+    }
 
-.left {
-    float: left;
-}
+    .left {
+        float: left;
+    }
 
-.right {
-    float: right;
-}
+    .right {
+        float: right;
+    }
 
-.time {
-    /* Prevent from text to be selectable */
-    user-select: none;
-    -webkit-tap-highlight-color: radial-gradient(circle, #051937, #061534, #080f30, #0a082d, #0c0029);
-}
+    .time {
+        /* Prevent from text to be selectable */
+        user-select: none;
+        -webkit-tap-highlight-color: radial-gradient(circle, #051937, #061534, #080f30, #0a082d, #0c0029);
+    }
 
-.button:hover {
-    color: #F9F871;
-    cursor: pointer;
-    transition: color 0.5s ease;
-}
+    .button {
+        @include transition(color);
 
-.selector {
-    stroke: #00456A;
-    stroke-width: 5;
-    stroke-linecap: round;
-    fill: none;
-    stroke-linejoin: round;
-    cursor: pointer;
+        &:hover {
+            color: #F9F871;
+            cursor: pointer;
+            @include transition(color);
+        }
+    }
+
+    .selector {
+        stroke: #00456A;
+        stroke-width: 5;
+        stroke-linecap: round;
+        fill: none;
+        stroke-linejoin: round;
+        cursor: pointer;
+    }
 }
 </style>
