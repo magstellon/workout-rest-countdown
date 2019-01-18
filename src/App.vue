@@ -11,19 +11,6 @@ export default {
   name: 'app',
   components: {
     Interval
-  },
-  data() {
-      return {
-          started: false
-      }
-  },
-  methods: {
-    start() {
-      this.started = true;
-    },
-    stop() {
-      this.started = false;
-    }
   }
 }
 </script>

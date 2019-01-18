@@ -184,6 +184,12 @@ export default {
         fill: none;
         stroke-linejoin: round;
         cursor: pointer;
+        @include transition(stroke);
+
+        &:hover {
+            stroke: #006D8C;
+            @include transition(stroke);
+        }
     }
 }
 </style>
