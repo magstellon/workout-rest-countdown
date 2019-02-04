@@ -1,4 +1,4 @@
-# rest-interval
+# workout-rest-countdown
 
 ## Project setup
 ```

@@ -1,17 +1,13 @@
 <template>
   <div id="app">
-    <Interval />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Interval from './components/Interval.vue'
 
 export default {
-  name: 'app',
-  components: {
-    Interval
-  }
+  name: 'app'
 }
 </script>
 

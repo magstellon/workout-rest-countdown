@@ -1,5 +1,5 @@
 <template>
-    <div id="interval">
+    <div id="countdown">
         <svg width="300" height="300">
             <template v-if="editable">
                 <polyline class="selector" points="62 110 72 100 82 110" @click="update(selectors.second.add)"/>
@@ -26,13 +26,14 @@
 
 <script>
 export default {
-    name: 'Interval',
+    name: 'Countdown',
+    props: ['restTime'],
     data() {
         return {
             start: null,
             end: null,
-            duration: 30000,
-            timeLeft: 30000,
+            timeLeft: null,
+            duration: null,
             isRunning: false,
             editable: true,
             selectors: {
@@ -62,14 +63,14 @@ export default {
         play() {
             this.isRunning = true;
             this.editable = false;
-            this.computeInterval();
+            this.computeCountdown();
             this.run();
         },
         pause() {
             this.isRunning = false;
             this.runID && clearTimeout(this.runID);
         },
-        computeInterval() {
+        computeCountdown() {
             this.start = new Date();
             this.end = new Date(this.start.getTime());
             this.end.setMilliseconds(this.end.getMilliseconds() + this.timeLeft);
@@ -112,6 +113,7 @@ export default {
             }
 
             this.timeLeft = this.duration;
+            this.$router.push(`/${this.duration}`);
         }
     },
     computed: {
@@ -119,9 +121,18 @@ export default {
             return this.timeLeft <= 0;
         }
     },
+    created() {
+        this.timeLeft = this.duration = this.restTime;
+    },
     beforeDestroyed() {
         // Remove timeout loop on component's destroy
         this.pause();
+    },
+    beforeRouteUpdate (to, from, next) {
+        let restTime = parseInt(to.params.restTime);
+        
+        this.timeLeft = this.duration = restTime;
+        next();
     }
 }
 </script>
@@ -132,7 +143,7 @@ export default {
     transition: $property 0.5s ease;
 }
 
-#interval {
+#countdown {
     position: absolute;
     top: 50%;
     left: 50%;

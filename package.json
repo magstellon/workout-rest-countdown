@@ -1,5 +1,5 @@
 {
-  "name": "rest-interval",
+  "name": "workout-rest-countdown",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -18,7 +18,8 @@
     "i": "^0.3.6",
     "npm": "^6.5.0",
     "serve-static": "^1.13.2",
-    "vue": "^2.5.21"
+    "vue": "^2.5.21",
+    "vue-router": "^3.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
