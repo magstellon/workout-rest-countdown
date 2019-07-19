@@ -1,29 +1,12 @@
-# workout-rest-countdown
+# Workout rest countdown
 
-## Project setup
-```
-npm install
-```
+:watch: Workout countdown based on Vue.js 2.0
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Features:
 
-### Compiles and minifies for production
-```
-npm run build
-```
+* Start, pause, stop and refresh countdown
+* Smooth visualization of the remaining time
 
-### Run your tests
-```
-npm run test
-```
+Environment:
 
-### Lints and fixes files
-```
-npm run lint 
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[Staging](https://workout-rest-countdown.herokuapp.com)
